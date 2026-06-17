@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolaris - Adaptación, Mutación y Tiempo Geológico</title>
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        escolaris: {
+                            blue: '#0d4653',       /* Azul corporativo */
+                            blueLight: '#1b6374',  /* Variante clara */
+                            blueDark: '#072e37',   /* Variante oscura */
+                            gold: '#f7941d',       /* Amarillo/Oro de Escolaris */
+                            goldDark: '#d97d10',   /* Variante oscura */
+                            accent: '#d9531e',     /* Naranja/Rojo del avión */
+                            bgLight: '#f4f8f9'     /* Fondo suave */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts para tipografía premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f8f9;
+        }
+        /* Transición de diapositivas suave */
+        .slide-fade {
+            transition: all 0.3s ease-in-out;
+        }
+        /* Ocultar barra de scroll en sliders horizontales de eras */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* Animación del ADN al mutar */
+        .dna-bubble {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .dna-mutate-anim {
+            transform: rotateY(360deg) scale(1.2);
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen justify-between overflow-x-hidden">
+
+    <!-- BARRA DE NAVEGACIÓN Y LOGO ESCOLARIS (Versión más compacta para Canvas) -->
+    <header class="bg-white border-b-2 border-escolaris-blue/10 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-2 sm:px-6 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <!-- Logotipo e Isotipo vectorizado de Escolaris (Avión de papel de la pág. 9) -->
+                <svg class="w-8 h-8 sm:w-10 sm:h-10 shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 15L25 65L50 55V15Z" fill="#f7941d" />
+                    <path d="M50 15L75 65L50 55V15Z" fill="#d97d10" />
+                    <path d="M50 55L58 65L50 15V55Z" fill="#d9531e" opacity="0.9" />
+                    <path d="M50 55L42 65L50 15V55Z" fill="#b1640a" opacity="0.3" />
+                </svg>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-black tracking-tight text-escolaris-blue flex items-baseline">
+                        ESCOL<span class="text-escolaris-gold">A</span>RIS
+                    </h1>
+                    <p class="text-[8px] uppercase tracking-wider text-escolaris-accent font-semibold -mt-1 hidden sm:block">
+                        Educación para trascender
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-escolaris-blue/10 text-escolaris-blue">
+                    📚 Material Explicativo
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-escolaris-gold/10 text-escolaris-goldDark">
+                    ⏱️ 10 min
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL CON LIMITADOR DE ALTURA PARA PREVENIR SCROLL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-2 sm:px-4 py-3 flex flex-col justify-center">
+
+        <!-- DIAPOSITIVAS INTERACTIVAS -->
+        <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden min-h-[500px] flex flex-col justify-between">
+            
+            <!-- CONTENIDO DE DIAPOSITIVAS -->
+            <div id="slideContainer" class="p-4 sm:p-6 flex-grow">
+                
+                <!-- DIAPOSITIVA 1: INTRODUCCIÓN, SITUACIÓN Y META -->
+                <div id="slide1" class="slide-fade block space-y-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        <div class="lg:col-span-7 space-y-4">
+                            <span class="bg-escolaris-gold/10 text-escolaris-goldDark font-bold px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wide inline-flex items-center">
+                                🚀 Situación de Entrada
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-escolaris-blue leading-tight">
+                                Adaptación, Mutación y Tiempo Geológico
+                            </h2>
+                            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+                                Imagina una población de seres vivos que habita en un ambiente que cambia lentamente. Algunos rasgos les ayudan a sobrevivir mejor, mientras que otros aparecen de manera repentina por cambios internos invisibles a simple vista.
+                            </p>
+                            
+                            <!-- Tarjeta de Meta Educativa -->
+                            <div class="bg-escolaris-blue/5 border-l-4 border-escolaris-blue p-4 rounded-r-xl space-y-1">
+                                <h4 class="font-bold text-escolaris-blue text-xs uppercase tracking-wider flex items-center">
+                                    🎯 Meta de Aprendizaje
+                                </h4>
+                                <p class="text-slate-700 text-xs sm:text-sm">
+                                    Aprenderás a diferenciar la <strong>adaptación</strong> de la <strong>mutación</strong>, y comprenderás cómo se relacionan directamente con la supervivencia de los seres vivos a lo largo del inmenso <strong>tiempo geológico</strong>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Panel de Ilustración interactiva de entrada -->
+                        <div class="lg:col-span-5 bg-gradient-to-br from-escolaris-blue/10 to-escolaris-gold/10 rounded-xl p-4 border border-slate-100 flex flex-col items-center justify-center text-center space-y-3 relative overflow-hidden min-h-[220px]">
+                            <div class="absolute inset-0 opacity-10 flex items-center justify-center">
+                                <svg class="w-36 h-36 text-escolaris-blue" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                            </div>
+                            <div class="relative z-10 space-y-3">
+                                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mx-auto border-4 border-escolaris-gold">
+                                    <!-- Icono de Ciencia (ADN) Estilo Escolaris -->
+                                    <svg class="w-8 h-8 text-escolaris-blue" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M30 20C40 35 60 35 70 20" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                                        <path d="M30 80C40 65 60 65 70 80" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                                        <path d="M30 50C40 50 60 50 70 50" stroke="#f7941d" stroke-width="6" stroke-linecap="round"/>
+                                        <circle cx="30" cy="20" r="6" fill="currentColor"/>
+                                        <circle cx="70" cy="20" r="6" fill="#f7941d"/>
+                                        <circle cx="30" cy="80" r="6" fill="#f7941d"/>
+                                        <circle cx="70" cy="80" r="6" fill="currentColor"/>
+                                    </svg>
+                                </div>
+                                <h3 class="font-bold text-escolaris-blue text-sm sm:text-base">¿Estás listo para explorar el cambio?</h3>
+                                <button onclick="nextSlide()" class="bg-escolaris-blue hover:bg-escolaris-blueLight text-white font-bold px-5 py-2 rounded-xl shadow-sm transition duration-300 transform hover:-translate-y-0.5 text-xs uppercase tracking-wider">
+                                    Comenzar Viaje →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIAPOSITIVA 2: CONCEPTOS CENTRALES - MUTACIÓN VS ADAPTACIÓN -->
+                <div id="slide2" class="slide-fade hidden space-y-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <span class="bg-escolaris-blue/10 text-escolaris-blue font-bold px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wide">
+                            Paso 2 de 5 • Conceptos Fundamentales
+                        </span>
+                        <h2 class="text-lg sm:text-xl font-bold text-escolaris-blue mt-1">¿Mutación o Adaptación? Descubre la Diferencia</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Tarjeta Mutación -->
+                        <div class="bg-slate-50 rounded-xl p-4 border-2 border-dashed border-slate-200 hover:border-escolaris-gold transition-all duration-300 flex flex-col justify-between space-y-3">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="bg-escolaris-gold/20 text-escolaris-goldDark font-extrabold px-2 py-0.5 rounded-md text-[10px] uppercase">
+                                        Interno & Aleatorio
+                                    </span>
+                                    <svg class="w-6 h-6 text-escolaris-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-base font-bold text-escolaris-blue">La Mutación</h3>
+                                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                                    Es un <strong>cambio aleatorio en el código genético (ADN)</strong>. No surge para resolver un problema; ocurre por azar y genera un nuevo <strong>rasgo</strong>.
+                                </p>
+                                
+                                <!-- Contenedor Interactivo con Camaleón SVG -->
+                                <div class="bg-white p-2.5 rounded-lg border border-slate-100 flex items-center space-x-3">
+                                    <div class="relative shrink-0 w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-sm overflow-hidden">
+                                        <svg id="mutantChameleon" class="w-10 h-10 transition-all duration-1000 transform" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 70C15 65 15 55 20 50C25 45 35 48 35 55C35 62 27 65 25 60" stroke="#10b981" id="chameleonTail" stroke-width="6" stroke-linecap="round" class="transition-colors duration-1000" />
+                                            <path d="M30 55C35 40 60 38 70 50C75 55 78 65 70 70C60 75 40 75 30 55Z" fill="#10b981" id="chameleonBody" class="transition-colors duration-1000" />
+                                            <path d="M65 48C65 38 78 35 85 42C92 48 88 58 80 58C72 58 65 52 65 48Z" fill="#0f9f6e" id="chameleonHead" class="transition-colors duration-1000" />
+                                            <path d="M72 36L76 42M78 34L81 40" stroke="#047857" stroke-width="3" stroke-linecap="round" />
+                                            <circle cx="78" cy="44" r="5" fill="#ffffff" />
+                                            <circle cx="79" cy="44" r="2.5" fill="#000000" />
+                                            <path d="M42 68L40 78M62 68L64 78" stroke="#047857" id="chameleonLegs" stroke-width="5" stroke-linecap="round" class="transition-colors duration-1000" />
+                                        </svg>
+                                        <span id="mutationSparkle" class="absolute inset-0 bg-escolaris-gold/20 opacity-0 transition-opacity duration-300 pointer-events-none flex items-center justify-center font-bold text-[8px] text-escolaris-goldDark">⚡ MUTADO</span>
+                                    </div>
+                                    <div class="text-[10px] sm:text-xs text-slate-500">
+                                        <strong class="text-slate-700 block">Camaleón común</strong>
+                                        <span id="chameleonDesc">Piel verde estándar 🟢. Presiona el botón de mutar para alterar su ADN.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Interacción Mutación -->
+                            <div class="pt-2 border-t border-slate-200/60 space-y-2">
+                                <div class="flex items-center justify-between gap-2">
+                                    <div id="dnaSequenceContainer" class="flex items-center justify-center bg-slate-900 px-2 py-1.5 rounded-lg space-x-1 grow overflow-hidden">
+                                        <span id="base1" class="dna-bubble font-mono text-[10px] font-bold bg-blue-500 text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm">A</span>
+                                        <span id="base2" class="dna-bubble font-mono text-[10px] font-bold bg-emerald-500 text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm">T</span>
+                                        <span id="base3" class="dna-bubble font-mono text-[10px] font-bold bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm">G</span>
+                                        <span id="base4" class="dna-bubble font-mono text-[10px] font-bold bg-purple-500 text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm">C</span>
+                                        <span id="base5" class="dna-bubble font-mono text-[10px] font-bold bg-pink-500 text-white w-5 h-5 rounded-full flex items-center justify-center shadow-sm">C</span>
+                                        <span id="base6" class="dna-bubble font-mono text-[10px] font-bold bg-amber-50 text-slate-900 w-5 h-5 rounded-full flex items-center justify-center shadow-sm">G</span>
+                                    </div>
+                                    <button onclick="mutateSequence()" class="bg-escolaris-gold hover:bg-escolaris-goldDark text-white px-3 py-1.5 rounded-lg font-bold text-[10px] shadow-sm transition shrink-0">
+                                        🧬 Mutar ADN
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Adaptación -->
+                        <div class="bg-slate-50 rounded-xl p-4 border-2 border-dashed border-slate-200 hover:border-escolaris-blue transition-all duration-300 flex flex-col justify-between space-y-3">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="bg-escolaris-blue/20 text-escolaris-blue font-extrabold px-2 py-0.5 rounded-md text-[10px] uppercase">
+                                        Evolutivo & Ambiental
+                                    </span>
+                                    <svg class="w-6 h-6 text-escolaris-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h2m4-1c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-base font-bold text-escolaris-blue">La Adaptación</h3>
+                                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                                    Es el proceso mediante el cual un rasgo beneficioso se vuelve común en una población porque ayuda a sobrevivir en un entorno específico.
+                                </p>
+                                
+                                <!-- Visualizador Dinámico de Ecosistema y Camuflaje -->
+                                <div id="adaptationEnvVisualizer" class="relative h-24 rounded-lg border border-slate-200/60 overflow-hidden flex items-center justify-around transition-all duration-500 bg-gradient-to-r from-emerald-800/10 to-emerald-600/25">
+                                    <!-- Decoraciones de Fondo (Árboles/Cactus) -->
+                                    <div id="envDecorationLeft" class="absolute left-2 bottom-0 opacity-20">
+                                        <svg class="w-8 h-8 text-emerald-800" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2L4 12h3v8h10v-8h3L12 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div id="envDecorationRight" class="absolute right-2 bottom-0 opacity-20">
+                                        <svg class="w-8 h-8 text-emerald-800" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2L4 12h3v8h10v-8h3L12 2z"/>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Camaleón Verde -->
+                                    <div id="adapChamGreen" class="flex flex-col items-center z-10 transition-all duration-500 opacity-20 transform scale-90">
+                                        <svg class="w-10 h-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 70C15 65 15 55 20 50C25 45 35 48 35 55C35 62 27 65 25 60" stroke="#10b981" stroke-width="6" stroke-linecap="round" />
+                                            <path d="M30 55C35 40 60 38 70 50C75 55 78 65 70 70C60 75 40 75 30 55Z" fill="#10b981" />
+                                            <path d="M65 48C65 38 78 35 85 42C92 48 88 58 80 58C72 58 65 52 65 48Z" fill="#0f9f6e" />
+                                            <circle cx="78" cy="44" r="5" fill="#ffffff" />
+                                            <circle cx="79" cy="44" r="2.5" fill="#000000" />
+                                            <path d="M42 68L40 78M62 68L64 78" stroke="#047857" stroke-width="5" stroke-linecap="round" />
+                                        </svg>
+                                        <span id="adapLabelGreen" class="text-[8px] font-bold mt-1 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Camuflado 🛡️</span>
+                                    </div>
+
+                                    <!-- Camaleón Amarillo -->
+                                    <div id="adapChamYellow" class="flex flex-col items-center z-10 transition-all duration-500 opacity-100 transform scale-105">
+                                        <svg class="w-10 h-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M20 70C15 65 15 55 20 50C25 45 35 48 35 55C35 62 27 65 25 60" stroke="#f7941d" stroke-width="6" stroke-linecap="round" />
+                                            <path d="M30 55C35 40 60 38 70 50C75 55 78 65 70 70C60 75 40 75 30 55Z" fill="#f7941d" />
+                                            <path d="M65 48C65 38 78 35 85 42C92 48 88 58 80 58C72 58 65 52 65 48Z" fill="#d97d10" />
+                                            <circle cx="78" cy="44" r="5" fill="#ffffff" />
+                                            <circle cx="79" cy="44" r="2.5" fill="#000000" />
+                                            <path d="M42 68L40 78M62 68L64 78" stroke="#b1640a" stroke-width="5" stroke-linecap="round" />
+                                        </svg>
+                                        <span id="adapLabelYellow" class="text-[8px] font-bold mt-1 px-1.5 py-0.5 rounded-full bg-red-100 text-red-800">¡Visible! 🦅</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interacción Adaptación -->
+                            <div class="pt-2 border-t border-slate-200/60 space-y-1">
+                                <p class="text-[10px] font-semibold text-slate-500">Simular entorno:</p>
+                                <div class="flex space-x-2">
+                                    <button onclick="toggleEnvironment('forest')" id="btnEnvForest" class="flex-1 bg-emerald-700 text-white font-bold py-1.5 px-2 rounded-lg text-[10px] shadow-sm border-2 border-emerald-950 transition">
+                                        🌲 Bosque
+                                    </button>
+                                    <button onclick="toggleEnvironment('desert')" id="btnEnvDesert" class="flex-1 bg-amber-500 text-white font-bold py-1.5 px-2 rounded-lg text-[10px] shadow-sm border-2 border-transparent transition">
+                                        🏜️ Desierto
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro explicativo unificador -->
+                    <div id="unificationBox" class="bg-escolaris-gold/10 p-3 rounded-xl border border-escolaris-gold/30 text-center">
+                        <p class="text-xs font-semibold text-escolaris-blue">
+                            💡 <span id="unificationText">¿Cómo se conectan? Las <strong>mutaciones</strong> generan rasgos de manera aleatoria. Luego, el ambiente decide cuáles de esos rasgos se convierten en <strong>adaptaciones</strong> ventajosas.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- DIAPOSITIVA 3: LÍNEA DEL TIEMPO ANIMADA (TIEMPO GEOLÓGICO) - OPTIMIZADA VERTICALMENTE -->
+                <div id="slide3" class="slide-fade hidden space-y-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <span class="bg-escolaris-blue/10 text-escolaris-blue font-bold px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wide">
+                            Paso 3 de 5 • El Gran Reloj de la Tierra
+                        </span>
+                        <h2 class="text-lg sm:text-xl font-bold text-escolaris-blue mt-1">Las Eras Geológicas: El Escenario del Cambio</h2>
+                    </div>
+
+                    <!-- LÍNEA DEL TIEMPO INTERACTIVA - CAMBIO A TABS HORIZONTALES EN MÓVIL / CANVAS ESTRECHO -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        
+                        <!-- Lista de Eras: Fila deslizable en pantallas pequeñas, columna en pantallas grandes -->
+                        <div class="lg:col-span-4 flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 pb-2 lg:pb-0 no-scrollbar snap-x scroll-smooth">
+                            <button onclick="selectEra(1)" id="era1" class="era-btn snap-center shrink-0 w-[140px] lg:w-full text-left p-2.5 rounded-xl border-2 border-slate-100 bg-white hover:border-escolaris-blue transition duration-300 flex items-center justify-between gap-1">
+                                <div class="truncate">
+                                    <span class="text-[8px] font-semibold uppercase text-slate-400 block">4,600M Ma</span>
+                                    <h4 class="font-bold text-slate-800 text-xs truncate">Precámbrico</h4>
+                                </div>
+                                <span class="text-lg">🧫</span>
+                            </button>
+                            <button onclick="selectEra(2)" id="era2" class="era-btn snap-center shrink-0 w-[140px] lg:w-full text-left p-2.5 rounded-xl border-2 border-slate-100 bg-white hover:border-escolaris-blue transition duration-300 flex items-center justify-between gap-1">
+                                <div class="truncate">
+                                    <span class="text-[8px] font-semibold uppercase text-slate-400 block">541M Ma</span>
+                                    <h4 class="font-bold text-slate-800 text-xs truncate">Paleozoico</h4>
+                                </div>
+                                <span class="text-lg">🐟</span>
+                            </button>
+                            <button onclick="selectEra(3)" id="era3" class="era-btn snap-center shrink-0 w-[140px] lg:w-full text-left p-2.5 rounded-xl border-2 border-slate-100 bg-white hover:border-escolaris-blue transition duration-300 flex items-center justify-between gap-1">
+                                <div class="truncate">
+                                    <span class="text-[8px] font-semibold uppercase text-slate-400 block">252M Ma</span>
+                                    <h4 class="font-bold text-slate-800 text-xs truncate">Mesozoico</h4>
+                                </div>
+                                <span class="text-lg">🦕</span>
+                            </button>
+                            <button onclick="selectEra(4)" id="era4" class="era-btn snap-center shrink-0 w-[140px] lg:w-full text-left p-2.5 rounded-xl border-2 border-slate-100 bg-white hover:border-escolaris-blue transition duration-300 flex items-center justify-between gap-1">
+                                <div class="truncate">
+                                    <span class="text-[8px] font-semibold uppercase text-slate-400 block">66M Ma</span>
+                                    <h4 class="font-bold text-slate-800 text-xs truncate">Cenozoico</h4>
+                                </div>
+                                <span class="text-lg">🦣</span>
+                            </button>
+                        </div>
+
+                        <!-- Panel de Detalle de Era (Optimizado en altura) -->
+                        <div class="lg:col-span-8 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 border border-slate-200/60 flex flex-col justify-between min-h-[220px] space-y-3">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span id="eraBadge" class="bg-escolaris-blue text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider">
+                                        Precámbrico
+                                    </span>
+                                    <span id="eraDuration" class="text-[10px] font-bold text-slate-500">
+                                        Hace 4,600 M de años
+                                    </span>
+                                </div>
+                                <h3 id="eraTitle" class="text-base sm:text-lg font-bold text-escolaris-blue">El Amanecer de la Vida</h3>
+                                <p id="eraDescription" class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                                    El agua de los océanos primitivos contenía las primeras moléculas orgánicas. Durante miles de millones de años, organismos unicelulares muy simples dominaron el planeta. Aquí surge la fotosíntesis, cambiando la atmósfera para siempre.
+                                </p>
+                            </div>
+
+                            <!-- Gráfico de Era animado sencillo -->
+                            <div class="bg-white p-3 rounded-lg border border-slate-200/80 flex items-center justify-between gap-4">
+                                <div class="space-y-0.5">
+                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Hito Biológico Clave</span>
+                                    <p id="eraMilestone" class="font-bold text-slate-700 text-xs sm:text-sm">Aparición de bacterias fotosintéticas</p>
+                                </div>
+                                <div id="eraGraphic" class="w-10 h-10 rounded-full bg-escolaris-gold/10 flex items-center justify-center text-2xl shrink-0">
+                                    🧫
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIAPOSITIVA 4: SIMULADOR DE SELECCIÓN NATURAL -->
+                <div id="slide4" class="slide-fade hidden space-y-4">
+                    <div class="border-b border-slate-100 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <span class="bg-escolaris-gold/10 text-escolaris-goldDark font-bold px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wide">
+                                Paso 4 de 5 • Simulador Interactivo
+                            </span>
+                            <h2 class="text-lg sm:text-xl font-bold text-escolaris-blue mt-1">Laboratorio "Escolaritos"</h2>
+                        </div>
+                        <div class="mt-1 sm:mt-0">
+                            <button onclick="resetSimulation()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-[10px] font-bold px-2.5 py-1 rounded-lg transition">
+                                🔄 Reiniciar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Simulador Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        
+                        <!-- Panel de Control del Simulador -->
+                        <div class="lg:col-span-5 space-y-3">
+                            <!-- Controles Interactivos -->
+                            <div class="bg-slate-50 rounded-xl p-3 border border-slate-200/60 space-y-3">
+                                <!-- Cambiar Clima -->
+                                <div class="space-y-1">
+                                    <label class="text-[10px] font-bold text-slate-500 block">1. Modifica el Clima:</label>
+                                    <div class="flex space-x-2">
+                                        <button id="simBtnForest" onclick="setSimEnvironment('forest')" class="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold bg-emerald-700 text-white border-2 border-emerald-900 shadow-sm transition">
+                                            🌲 Bosque
+                                        </button>
+                                        <button id="simBtnDesert" onclick="setSimEnvironment('desert')" class="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold bg-amber-100 text-amber-700 border border-slate-200 transition">
+                                            🏜️ Desierto
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Forzar Mutación -->
+                                <div class="space-y-1 pt-1.5 border-t border-slate-200">
+                                    <label class="text-[10px] font-bold text-slate-500 block">2. Inducir Mutación:</label>
+                                    <button onclick="triggerSimMutation()" class="w-full bg-escolaris-gold hover:bg-escolaris-goldDark text-white font-bold py-1.5 px-3 rounded-lg text-[10px] shadow-sm transition">
+                                        🧬 Mutar a un Individuo (Amarillo 🟡)
+                                    </button>
+                                </div>
+
+                                <!-- Avanzar Generación -->
+                                <div class="space-y-1 pt-1.5 border-t border-slate-200">
+                                    <button onclick="advanceGeneration()" class="w-full bg-escolaris-blue hover:bg-escolaris-blueLight text-white font-extrabold py-2 px-3 rounded-lg text-xs shadow-md transition flex items-center justify-center space-x-1">
+                                        <span>⏳ Avanzar 1 Generación</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Arena de la Simulación (Reducida en altura para evitar scroll) -->
+                        <div class="lg:col-span-7 flex flex-col justify-between">
+                            <div id="simArena" class="relative w-full h-[180px] bg-emerald-50 rounded-xl border-4 border-emerald-800/20 overflow-hidden transition-all duration-500 shadow-inner flex flex-wrap p-4 items-center justify-center content-center gap-2">
+                                <!-- Los Escolaritos se generarán aquí mediante JavaScript -->
+                            </div>
+
+                            <!-- Panel de Estadísticas en vivo -->
+                            <div class="grid grid-cols-3 gap-2 mt-2 text-center">
+                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
+                                    <span class="text-[9px] font-bold text-slate-400 block uppercase">Generación</span>
+                                    <span id="statGen" class="text-sm font-black text-slate-700">0</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
+                                    <span class="text-[9px] font-bold text-slate-400 block uppercase">🔵 Azules</span>
+                                    <span id="statBlue" class="text-sm font-black text-escolaris-blue">15</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 rounded-lg border border-slate-200/60">
+                                    <span class="text-[9px] font-bold text-slate-400 block uppercase">🟡 Amarillos</span>
+                                    <span id="statYellow" class="text-sm font-black text-escolaris-gold">0</span>
+                                </div>
+                            </div>
+
+                            <!-- Log del Simulador -->
+                            <div id="simLog" class="mt-2 bg-slate-800 text-white text-[9px] px-3 py-1.5 rounded-lg font-mono text-center">
+                                🚀 ¡Mutación genética requerida para iniciar!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIAPOSITIVA 5: CIERRE Y CONEXIÓN -->
+                <div id="slide5" class="slide-fade hidden space-y-4">
+                    <div class="border-b border-slate-100 pb-2">
+                        <span class="bg-escolaris-gold/10 text-escolaris-goldDark font-bold px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-wide">
+                            Paso Final • Conexión Educativa
+                        </span>
+                        <h2 class="text-lg sm:text-xl font-bold text-escolaris-blue mt-1">¡Felicitaciones! Has completado el Material Explicativo</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                        <div class="md:col-span-7 space-y-3">
+                            <h3 class="text-sm sm:text-base font-bold text-slate-800">¿Qué hemos aprendido hoy?</h3>
+                            
+                            <ul class="space-y-2">
+                                <li class="flex items-start space-x-2 text-xs sm:text-sm text-slate-600">
+                                    <svg class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>La <strong>mutación</strong> es un cambio aleatorio en el ADN que genera nuevos rasgos.</span>
+                                </li>
+                                <li class="flex items-start space-x-2 text-xs sm:text-sm text-slate-600">
+                                    <svg class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <span>La <strong>adaptación</strong> surge cuando el ambiente premia esos rasgos para la supervivencia.</span>
+                                </li>
+                            </ul>
+
+                            <div class="bg-escolaris-gold/10 rounded-xl p-3 border border-escolaris-gold/20">
+                                <p class="text-[10px] sm:text-xs text-slate-700 leading-relaxed font-semibold">
+                                    🔗 <strong>Siguiente paso:</strong> Dirígete a tu plataforma para iniciar la <strong>Lectura Interactiva</strong>. Allí profundizarás en estos conceptos de cara al proyecto escolar final.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Panel de acción final -->
+                        <div class="md:col-span-5 bg-gradient-to-br from-escolaris-blue to-escolaris-blueDark text-white rounded-xl p-4 text-center space-y-3">
+                            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mx-auto text-xl">
+                                ✨
+                            </div>
+                            <h3 class="font-bold text-sm">¿Listo para el siguiente reto?</h3>
+                            <button onclick="window.parent.postMessage('completed', '*')" class="w-full bg-escolaris-gold hover:bg-escolaris-goldDark text-white font-extrabold py-2 px-4 rounded-xl shadow-sm transition text-[10px] uppercase tracking-wider">
+                                Completar Material Explicativo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FOOTER DE DIAPOSITIVAS: CONTROLES DE NAVEGACIÓN -->
+            <div class="bg-slate-50 border-t border-slate-100 px-4 py-3 flex items-center justify-between shrink-0">
+                
+                <!-- Botón Atrás -->
+                <button id="btnPrev" onclick="prevSlide()" class="invisible flex items-center space-x-1.5 text-slate-500 hover:text-escolaris-blue font-bold text-xs sm:text-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    <span>Atrás</span>
+                </button>
+
+                <!-- Indicador de Páginas -->
+                <div class="flex items-center space-x-1.5">
+                    <span id="dot1" class="w-2.5 h-2.5 rounded-full bg-escolaris-blue transition-all duration-300"></span>
+                    <span id="dot2" class="w-2.5 h-2.5 rounded-full bg-slate-300 transition-all duration-300"></span>
+                    <span id="dot3" class="w-2.5 h-2.5 rounded-full bg-slate-300 transition-all duration-300"></span>
+                    <span id="dot4" class="w-2.5 h-2.5 rounded-full bg-slate-300 transition-all duration-300"></span>
+                    <span id="dot5" class="w-2.5 h-2.5 rounded-full bg-slate-300 transition-all duration-300"></span>
+                </div>
+
+                <!-- Botón Siguiente -->
+                <button id="btnNext" onclick="nextSlide()" class="bg-escolaris-blue hover:bg-escolaris-blueLight text-white font-bold px-4 py-1.5 rounded-lg text-xs sm:text-sm shadow flex items-center space-x-1">
+                    <span>Siguiente</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- LÓGICA DE INTERACCIÓN JAVASCRIPT -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 5;
+
+        function updateSlideUI() {
+            for (let i = 1; i <= totalSlides; i++) {
+                document.getElementById(`slide${i}`).classList.add('hidden');
+                document.getElementById(`slide${i}`).classList.remove('block');
+                
+                const dot = document.getElementById(`dot${i}`);
+                if (i <= currentSlide) {
+                    dot.classList.add('bg-escolaris-blue', 'w-4');
+                    dot.classList.remove('bg-slate-300', 'w-2.5');
+                } else {
+                    dot.classList.remove('bg-escolaris-blue', 'w-4');
+                    dot.classList.add('bg-slate-300', 'w-2.5');
+                }
+            }
+
+            const currentEl = document.getElementById(`slide${currentSlide}`);
+            currentEl.classList.remove('hidden');
+            currentEl.classList.add('block');
+
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+
+            if (currentSlide === 1) {
+                btnPrev.classList.add('invisible');
+            } else {
+                btnPrev.classList.remove('invisible');
+            }
+
+            if (currentSlide === totalSlides) {
+                btnNext.classList.add('invisible');
+            } else {
+                btnNext.classList.remove('invisible');
+            }
+
+            if (currentSlide === 4) {
+                initSimulation();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideUI();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideUI();
+            }
+        }
+
+        // ------------------ INTERACCIONES DE MUTACIÓN Y ADAPTACIÓN ------------------
+        function playSynthMutationSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(200, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.4);
+                
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4);
+            } catch (e) {}
+        }
+
+        const dnaSequences = [
+            { letters: ["A", "C", "G", "T", "C", "G"], mutateIndex: 1, mutatedColor: "yellow" },
+            { letters: ["A", "A", "G", "T", "C", "G"], mutateIndex: 3, mutatedColor: "green" },
+            { letters: ["A", "A", "G", "C", "C", "G"], mutateIndex: 4, mutatedColor: "yellow" },
+            { letters: ["T", "A", "G", "C", "C", "G"], mutateIndex: 0, mutatedColor: "yellow" },
+            { letters: ["T", "A", "C", "C", "C", "G"], mutateIndex: 2, mutatedColor: "green" }
+        ];
+        
+        let currentDnaIndex = 0;
+        let isChameleonMutated = false;
+
+        function mutateSequence() {
+            currentDnaIndex = (currentDnaIndex + 1) % dnaSequences.length;
+            const currentMutation = dnaSequences[currentDnaIndex];
+            
+            playSynthMutationSound();
+
+            currentMutation.letters.forEach((letter, idx) => {
+                const bubble = document.getElementById(`base${idx + 1}`);
+                if (bubble) {
+                    bubble.textContent = letter;
+                    if (idx === currentMutation.mutateIndex) {
+                        bubble.classList.add('dna-mutate-anim', 'bg-escolaris-gold', 'text-slate-900');
+                        bubble.classList.remove('bg-blue-500', 'bg-emerald-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500', 'bg-amber-500', 'text-white');
+                        setTimeout(() => { bubble.classList.remove('dna-mutate-anim'); }, 500);
+                    } else {
+                        bubble.className = "dna-bubble font-mono text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm text-white";
+                        const colors = ['bg-blue-500', 'bg-emerald-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500', 'bg-amber-500'];
+                        bubble.classList.add(colors[idx % colors.length]);
+                    }
+                }
+            });
+
+            const body = document.getElementById('chameleonBody');
+            const head = document.getElementById('chameleonHead');
+            const tail = document.getElementById('chameleonTail');
+            const desc = document.getElementById('chameleonDesc');
+            const sparkle = document.getElementById('mutationSparkle');
+            const cardChameleon = document.getElementById('mutantChameleon');
+
+            cardChameleon.style.transform = "scale(1.25) rotate(-5deg)";
+            sparkle.classList.remove('opacity-0');
+            sparkle.classList.add('opacity-100');
+
+            setTimeout(() => {
+                cardChameleon.style.transform = "scale(1) rotate(0deg)";
+                sparkle.classList.remove('opacity-100');
+                sparkle.classList.add('opacity-0');
+            }, 600);
+
+            if (currentMutation.mutatedColor === "yellow") {
+                body.setAttribute('fill', '#f7941d');
+                head.setAttribute('fill', '#d97d10');
+                tail.setAttribute('stroke', '#f7941d');
+                desc.innerHTML = "<strong>¡Mutado!</strong> Nació con piel de color <strong>Amarillo Oro 🟡</strong> corporativo debido al cambio aleatorio en su código genético.";
+                isChameleonMutated = true;
+            } else {
+                body.setAttribute('fill', '#10b981');
+                head.setAttribute('fill', '#0f9f6e');
+                tail.setAttribute('stroke', '#10b981');
+                desc.innerHTML = "<strong>Mutación inversa:</strong> Sus genes regresaron al color de piel <strong>Verde regular 🟢</strong>.";
+                isChameleonMutated = false;
+            }
+
+            const textEl = document.getElementById('unificationText');
+            if (isChameleonMutated) {
+                textEl.innerHTML = "💡 ¡Increíble! Viste cómo el cambio fortuito en el ADN (<strong>Mutación</strong>) alteró el color de piel de la criatura. Ahora este nuevo rasgo físico está listo para ser sometido a la prueba del ambiente (<strong>Adaptación</strong>).";
+            } else {
+                textEl.innerHTML = "💡 Las <strong>mutaciones</strong> son el punto de partida de toda la biodiversidad. Cambian los nucleótidos de forma aleatoria, creando nuevos colores y formas.";
+            }
+        }
+
+        function toggleEnvironment(env) {
+            const btnForest = document.getElementById('btnEnvForest');
+            const btnDesert = document.getElementById('btnEnvDesert');
+            const box = document.getElementById('unificationBox');
+            const textEl = document.getElementById('unificationText');
+
+            const visualizer = document.getElementById('adaptationEnvVisualizer');
+            const decLeft = document.getElementById('envDecorationLeft');
+            const decRight = document.getElementById('envDecorationRight');
+            const chamGreen = document.getElementById('adapChamGreen');
+            const chamYellow = document.getElementById('adapChamYellow');
+            const labelGreen = document.getElementById('adapLabelGreen');
+            const labelYellow = document.getElementById('adapLabelYellow');
+
+            if (env === 'forest') {
+                btnForest.className = "flex-1 bg-emerald-700 text-white font-bold py-1.5 px-2 rounded-lg text-[10px] shadow-sm border-2 border-emerald-950 transition";
+                btnDesert.className = "flex-1 bg-amber-500 text-white font-bold py-1.5 px-2 rounded-lg text-[10px] shadow-sm border-2 border-transparent transition";
+                
+                box.className = "bg-emerald-50 p-3 rounded-xl border border-emerald-300 text-center transition-all duration-300";
+                textEl.innerHTML = "🌳 En el <strong>Bosque Verde</strong>, los seres de color verde se camuflan mejor. Su supervivencia es alta; el rasgo de color oscuro es una exitosa <strong>adaptación</strong>.";
+
+                // Forest Theme
+                visualizer.className = "relative h-24 rounded-lg border border-slate-200/60 overflow-hidden flex items-center justify-around transition-all duration-500 bg-gradient-to-r from-emerald-800/10 to-emerald-600/25";
+                
+                // SVG decoration changes (Trees)
+                decLeft.innerHTML = `<svg class="w-8 h-8 text-emerald-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 12h3v8h10v-8h3L12 2z"/></svg>`;
+                decRight.innerHTML = `<svg class="w-8 h-8 text-emerald-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 12h3v8h10v-8h3L12 2z"/></svg>`;
+
+                // Green Chameleon is CAMOUFLAGED
+                chamGreen.className = "flex flex-col items-center z-10 transition-all duration-500 opacity-20 transform scale-90";
+                labelGreen.className = "text-[8px] font-bold mt-1 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+                labelGreen.textContent = "Camuflado 🛡️";
+
+                // Yellow Chameleon is VISIBLE (Vulnerable to predators)
+                chamYellow.className = "flex flex-col items-center z-10 transition-all duration-500 opacity-100 transform scale-105";
+                labelYellow.className = "text-[8px] font-bold mt-1 px-1.5 py-0.5 rounded-full bg-red-100 text-red-800";
+                labelYellow.textContent = "¡Visible! 🦅";
+            } else {
+                btnDesert.className = "flex-1 bg-amber-600 text-white font-bold py-1.5 px-2 rounded-lg text-[10px] shadow-sm border-2 border-amber-950 transition";
+                btnForest.className = "flex-1 bg-emerald-600 text-white font-bold py-1.5 px-2 rounded-lg text-[10px] shadow-sm border-2 border-transparent transition";
+
+                box.className = "bg-amber-50 p-3 rounded-xl border border-amber-300 text-center transition-all duration-300";
+                textEl.innerHTML = "🏜️ En el <strong>Desierto Seco</strong>, las cosas cambian. Los seres de piel clara (amarilla) se camuflan con la arena, convirtiéndose ahora ese rasgo claro en la <strong>adaptación</strong> ganadora.";
+
+                // Desert Theme
+                visualizer.className = "relative h-24 rounded-lg border border-slate-200/60 overflow-hidden flex items-center justify-around transition-all duration-500 bg-gradient-to-r from-amber-600/15 to-amber-400/25";
+                
+                // SVG decoration changes (Cactus)
+                decLeft.innerHTML = `<svg class="w-8 h-8 text-amber-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a1 1 0 0 0-1 1v4H9a1 1 0 0 0-1 1v4H6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3H9V9h2v11a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-3z"/></svg>`;
+                decRight.innerHTML = `<svg class="w-8 h-8 text-amber-800" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a1 1 0 0 0-1 1v4H9a1 1 0 0 0-1 1v4H6a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3H9V9h2v11a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-3z"/></svg>`;
+
+                // Green Chameleon is VISIBLE
+                chamGreen.className = "flex flex-col items-center z-10 transition-all duration-500 opacity-100 transform scale-105";
+                labelGreen.className = "text-[8px] font-bold mt-1 px-1.5 py-0.5 rounded-full bg-red-100 text-red-800";
+                labelGreen.textContent = "¡Visible! 🦅";
+
+                // Yellow Chameleon is CAMOUFLAGED
+                chamYellow.className = "flex flex-col items-center z-10 transition-all duration-500 opacity-20 transform scale-90";
+                labelYellow.className = "text-[8px] font-bold mt-1 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800";
+                labelYellow.textContent = "Camuflado 🛡️";
+            }
+        }
+
+        // ------------------ INTERACCIONES DEL PASO 3 (ERAS GEOLÓGICAS) ------------------
+        const erasData = {
+            1: {
+                badge: "Precámbrico",
+                duration: "Hace 4,600 M de años",
+                title: "El Amanecer de la Vida",
+                description: "El agua de los océanos primitivos contenía las primeras moléculas orgánicas. Durante miles de millones de años, organismos unicelulares muy simples dominaron el planeta. Aquí surge la fotosíntesis, cambiando la atmósfera para siempre.",
+                milestone: "Aparición de bacterias fotosintéticas",
+                graphic: "🧫"
+            },
+            2: {
+                badge: "Paleozoico",
+                duration: "Hace 541 M de años",
+                title: "La Explosión de Vida Marina",
+                description: "Los mares se llenaron de vida compleja: trilobites, moluscos y los primeros peces con mandíbula. Al final de esta era, los seres vivos conquistaron la tierra firme gracias al surgimiento de adaptaciones clave como la respiración aérea.",
+                milestone: "Primeros anfibios y plantas terrestres",
+                graphic: "🐟"
+            },
+            3: {
+                badge: "Mesozoico",
+                duration: "Hace 252 M de años",
+                title: "La Era de los Dinosaurios",
+                description: "Una era dominada por grandes reptiles que adaptaron sus garras, alas y tamaños a los cambiantes ecosistemas continentales. Las primeras plantas con flor y aves también surgieron como mutaciones exitosas.",
+                milestone: "Surgimiento y dominio de dinosaurios",
+                graphic: "🦕"
+            },
+            4: {
+                badge: "Cenozoico",
+                duration: "Hace 66 M de años hasta hoy",
+                title: "La Era de los Mamíferos",
+                description: "Tras la extinción de los dinosaurios, los mamíferos heredaron la Tierra. Al diversificarse a lo largo del tiempo, se adaptaron a climas fríos (como las glaciaciones con pelaje grueso) y cálidos, culminando en el ser humano.",
+                milestone: "Surgimiento de mamíferos modernos y humanos",
+                graphic: "🦣"
+            }
+        };
+
+        function selectEra(eraId) {
+            document.querySelectorAll('.era-btn').forEach(btn => {
+                btn.classList.remove('border-escolaris-blue', 'bg-escolaris-blue/5');
+                btn.classList.add('border-slate-100', 'bg-white');
+            });
+
+            const activeBtn = document.getElementById(`era${eraId}`);
+            activeBtn.classList.remove('border-slate-100', 'bg-white');
+            activeBtn.classList.add('border-escolaris-blue', 'bg-escolaris-blue/5');
+
+            const data = erasData[eraId];
+            document.getElementById('eraBadge').textContent = data.badge;
+            document.getElementById('eraDuration').textContent = data.duration;
+            document.getElementById('eraTitle').textContent = data.title;
+            document.getElementById('eraDescription').textContent = data.description;
+            document.getElementById('eraMilestone').textContent = data.milestone;
+            document.getElementById('eraGraphic').textContent = data.graphic;
+        }
+
+        selectEra(1);
+
+        // ------------------ INTERACCIONES DEL PASO 4 (SIMULADOR) ------------------
+        let simGeneration = 0;
+        let simEnvironment = 'forest';
+        let population = [];
+        const initialPopulationSize = 15;
+
+        function initSimulation() {
+            simGeneration = 0;
+            simEnvironment = 'forest';
+            population = [];
+            
+            for (let i = 0; i < initialPopulationSize; i++) {
+                population.push({
+                    id: i,
+                    color: 'blue',
+                    x: Math.random() * 80 + 10,
+                    y: Math.random() * 70 + 15
+                });
+            }
+
+            renderArena();
+            updateSimStats();
+            setSimEnvironment('forest');
+        }
+
+        function setSimEnvironment(env) {
+            simEnvironment = env;
+            const arena = document.getElementById('simArena');
+            const btnForest = document.getElementById('simBtnForest');
+            const btnDesert = document.getElementById('simBtnDesert');
+
+            if (env === 'forest') {
+                arena.className = "relative w-full h-[180px] bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-xl border-4 border-emerald-800/40 overflow-hidden transition-all duration-500 shadow-inner flex flex-wrap p-4 items-center justify-center content-center gap-2";
+                btnForest.className = "flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold bg-emerald-700 text-white border-2 border-emerald-950 shadow-sm transition";
+                btnDesert.className = "flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-700 border border-slate-200 transition";
+            } else {
+                arena.className = "relative w-full h-[180px] bg-gradient-to-br from-amber-100 to-amber-200 rounded-xl border-4 border-amber-600/40 overflow-hidden transition-all duration-500 shadow-inner flex flex-wrap p-4 items-center justify-center content-center gap-2";
+                btnDesert.className = "flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold bg-amber-600 text-white border-2 border-amber-800 shadow-sm transition";
+                btnForest.className = "flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-slate-200 transition";
+            }
+
+            updateSimLog(`Clima cambiado a: <strong>${env === 'forest' ? '🌳 Bosque' : '🏜️ Desierto'}</strong>.`);
+        }
+
+        function triggerSimMutation() {
+            const blueOne = population.find(creature => creature.color === 'blue');
+            if (blueOne) {
+                blueOne.color = 'yellow';
+                renderArena();
+                updateSimStats();
+                updateSimLog('🧬 Un Escolarito cambió su código genético de Azul a Amarillo.');
+            } else {
+                updateSimLog('ℹ️ Todos los Escolaritos ya están mutados.');
+            }
+        }
+
+        function advanceGeneration() {
+            if (population.length === 0) {
+                updateSimLog('❌ No quedan Escolaritos para reproducirse. Reinicia la simulación.');
+                return;
+            }
+
+            simGeneration++;
+            let newPopulation = [];
+            let diedCount = 0;
+            let bornCount = 0;
+
+            population.forEach(creature => {
+                let survivalChance = 0.5;
+                if (simEnvironment === 'forest') {
+                    survivalChance = (creature.color === 'blue') ? 0.85 : 0.40;
+                } else {
+                    survivalChance = (creature.color === 'yellow') ? 0.90 : 0.30;
+                }
+
+                if (Math.random() < survivalChance) {
+                    newPopulation.push({
+                        ...creature,
+                        x: Math.random() * 80 + 10,
+                        y: Math.random() * 70 + 15
+                    });
+
+                    newPopulation.push({
+                        id: Date.now() + Math.random(),
+                        color: creature.color,
+                        x: Math.random() * 80 + 10,
+                        y: Math.random() * 70 + 15
+                    });
+                    bornCount++;
+                } else {
+                    diedCount++;
+                }
+            });
+
+            if (newPopulation.length > 20) {
+                newPopulation = newPopulation.slice(0, 20);
+            }
+
+            population = newPopulation;
+            renderArena();
+            updateSimStats();
+
+            let summaryMsg = `⏳ <strong>Gen. ${simGeneration}:</strong> Murieron ${diedCount} organismos. Nacieron ${bornCount} descendientes.`;
+            if (simEnvironment === 'desert' && population.filter(c => c.color === 'yellow').length > population.filter(c => c.color === 'blue').length) {
+                summaryMsg += ' ¡La mutación amarilla es ahora una <strong>adaptación dominante</strong>!';
+            }
+            updateSimLog(summaryMsg);
+        }
+
+        function renderArena() {
+            const arena = document.getElementById('simArena');
+            arena.innerHTML = '';
+
+            population.forEach(creature => {
+                const element = document.createElement('div');
+                element.className = `absolute w-5 h-5 rounded-full border border-white transition-all duration-500 shadow-sm flex items-center justify-center cursor-pointer`;
+                
+                if (creature.color === 'blue') {
+                    element.className += ' bg-escolaris-blue';
+                } else {
+                    element.className += ' bg-escolaris-gold';
+                }
+
+                element.style.left = `${creature.x}%`;
+                element.style.top = `${creature.y}%`;
+                
+                element.onclick = () => {
+                    creature.color = (creature.color === 'blue') ? 'yellow' : 'blue';
+                    renderArena();
+                    updateSimStats();
+                    updateSimLog(`🧬 Forzaste la mutación de un Escolarito.`);
+                };
+
+                arena.appendChild(element);
+            });
+        }
+
+        function updateSimStats() {
+            document.getElementById('statGen').textContent = simGeneration;
+            const blueCount = population.filter(c => c.color === 'blue').length;
+            const yellowCount = population.filter(c => c.color === 'yellow').length;
+            document.getElementById('statBlue').textContent = blueCount;
+            document.getElementById('statYellow').textContent = yellowCount;
+        }
+
+        function updateSimLog(msg) {
+            document.getElementById('simLog').innerHTML = `<span>${msg}</span>`;
+        }
+
+    </script>
+</body>
+</html>
